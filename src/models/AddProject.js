@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearState, creatEmployee, employeeSelector, getEmployees, updateEmployee } from 'src/redux/reducers/employee';
-import { getProjects, projectSelector } from 'src/redux/reducers/projects';
+import { createProject, getProjects, projectSelector, updateProject } from 'src/redux/reducers/projects';
 import { creatTask, getTasks, tasksSelector, updateTask } from 'src/redux/reducers/tasks';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,9 +38,9 @@ export default function AddProject({ open, handleClose, data, type }) {
   const [assigned_to, setAssigned_to] = useState('');
   const [project, setProject] = useState('');
   const { employee } = useSelector(employeeSelector);
-  const { successMessage, isSuccess, isError, errorMessage, isFetching } = useSelector(tasksSelector);
+  const { successMessage, isSuccess, isError, errorMessage, isFetching } = useSelector(projectSelector);
   const { projects } = useSelector(projectSelector);
-  const { title, project_id, description, start_date, status, task_id } = formData;
+  const { title, project_id, site_contact, site_address, description, start_date, status } = formData;
   useEffect(() => {
     dispatch(getProjects(token));
     dispatch(getEmployees(token));
@@ -48,13 +48,19 @@ export default function AddProject({ open, handleClose, data, type }) {
 
   var employeExloadAdmin = employee.filter((el) => el.role !== 'ADMIN');
 
+  console.log('project', project);
   useEffect(() => {
     setFormData({
-      title: data ? data?.task_title : '',
-      project_id: '',
-      description: data ? data?.task_description : '',
-      start_date: data ? data?.start_date : '',
-      status: 'PENDING',
+      project_id: data ? data?.id : '',
+      title: data ? data?.title : '',
+      description: data ? data?.description : '',
+      site_location: {
+        lat: 29.2131,
+        lng: -29.12312,
+      },
+      site_contact: data ? data?.site_contact : '',
+      site_address: data ? data?.site_address : '',
+
       task_id: data ? data?.task_id : '',
     });
   }, [open]);
@@ -75,20 +81,17 @@ export default function AddProject({ open, handleClose, data, type }) {
 
   const handleSubmit = async () => {
     formData.token = token;
-    formData.assigned_to = project;
-    formData.project_id = assigned_to;
 
-    if (type === 'Edit Task') {
-      dispatch(updateTask(formData));
+    if (type === 'Edit Project') {
+      dispatch(updateProject(formData));
     } else {
-      dispatch(creatTask(formData));
+      dispatch(createProject(formData));
     }
-    dispatch(getTasks(token));
   };
   console.log('issucess', isSuccess);
   useEffect(() => {
     if (isSuccess) {
-      dispatch(getTasks(token));
+      dispatch(getProjects(token));
 
       dispatch(clearState());
       handleClose();
@@ -106,7 +109,7 @@ export default function AddProject({ open, handleClose, data, type }) {
           <TextField
             margin="dense"
             id="title"
-            label="Task Title"
+            label="Project Title"
             type="text"
             fullWidth
             className={classes.input}
@@ -116,67 +119,55 @@ export default function AddProject({ open, handleClose, data, type }) {
           <TextField
             margin="dense"
             id="description"
-            label="Task Description"
+            label="Description"
             type="text"
             fullWidth
             className={classes.input}
             value={description}
             onChange={onChange}
           />
+          {type !== 'Edit Project' && (
+            <FormControl variant="outlined" className={classes.formControl} fullWidth>
+              <InputLabel id="demo-simple-select-outlined-label">Employee</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="project"
+                value={project}
+                onChange={handleEmployee}
+                label="employeeRole"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {employeExloadAdmin.map((emp) => (
+                  <MenuItem key={emp.id} value={emp.id}>
+                    {emp.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+
           <TextField
             margin="dense"
-            placeholder="Select date and time"
-            type="date"
-            id="start_date"
-            value={start_date}
-            onChange={onChange}
+            id="site_contact"
+            label="Site Contact"
+            type="text"
             fullWidth
             className={classes.input}
+            value={site_contact}
+            onChange={onChange}
           />
-
-          {type !== 'Edit Task' && (
-            <>
-              <FormControl variant="outlined" className={classes.formControl} fullWidth>
-                <InputLabel id="assigned_to">Projects</InputLabel>
-                <Select
-                  labelId="assigned_to"
-                  id="assigned_to"
-                  value={assigned_to}
-                  onChange={handleProject}
-                  label="employeeRole"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {projects.map((project) => (
-                    <MenuItem key={project.id} value={project.id}>
-                      {project.title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl variant="outlined" className={classes.formControl} fullWidth>
-                <InputLabel id="demo-simple-select-outlined-label">Employee</InputLabel>
-                <Select
-                  labelId="demo-simple-select-outlined-label"
-                  id="project"
-                  value={project}
-                  onChange={handleEmployee}
-                  label="employeeRole"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {employeExloadAdmin.map((emp) => (
-                    <MenuItem key={emp.id} value={emp.id}>
-                      {emp.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </>
-          )}
+          <TextField
+            margin="dense"
+            id="site_address"
+            label="Site Address"
+            type="text"
+            fullWidth
+            className={classes.input}
+            value={site_address}
+            onChange={onChange}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

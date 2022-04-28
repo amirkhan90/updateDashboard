@@ -9,10 +9,13 @@ import { deleteEmployee, getEmployees } from 'src/redux/reducers/employee';
 import AddEmployee from 'src/models/AddEmployee';
 import { deleteTask, getTasks } from 'src/redux/reducers/tasks';
 import AddTask from 'src/models/AddTask';
+import { deleteProject, getProjects } from 'src/redux/reducers/projects';
+import AddProject from 'src/models/AddProject';
 
 // ----------------------------------------------------------------------
 
 export default function UserMoreMenu({ data, tableType }) {
+  console.log('data', data);
   const dispatch = useDispatch();
   const [action, setAction] = useState({ open: false, type: '', data: null });
   const token = localStorage.getItem('token');
@@ -21,21 +24,23 @@ export default function UserMoreMenu({ data, tableType }) {
 
   let dataId;
 
-  if (tableType === 'user') {
+  if (tableType === 'user' || tableType === 'Edit Project') {
     dataId = data.id;
   } else if (tableType === 'Edit Task') {
     dataId = data.task_id;
   } else {
   }
   console.log('tableType', tableType);
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (tableType === 'user') {
-      dispatch(deleteEmployee({ token, id }));
+      await dispatch(deleteEmployee({ token, id }));
       dispatch(getEmployees(token));
     } else if (tableType === 'Edit Task') {
-      dispatch(deleteTask({ token, id }));
+      await dispatch(deleteTask({ token, id }));
       dispatch(getTasks(token));
     } else {
+      await dispatch(deleteProject({ token, id }));
+      dispatch(getProjects(token));
     }
   };
   return (
@@ -117,6 +122,9 @@ export default function UserMoreMenu({ data, tableType }) {
         )}
         {tableType === 'Edit Task' && (
           <AddTask {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        )}
+        {tableType === 'Edit Project' && (
+          <AddProject {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
         )}
       </Menu>
     </>

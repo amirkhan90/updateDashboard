@@ -32,6 +32,7 @@ import { employeeSelector, getEmployees } from 'src/redux/reducers/employee';
 import AddEmployee from 'src/models/AddEmployee';
 import { getProjects, projectSelector } from 'src/redux/reducers/projects';
 import AddTask from 'src/models/AddTask';
+import AddProject from 'src/models/AddProject';
 
 // ----------------------------------------------------------------------
 
@@ -149,7 +150,7 @@ export default function Project() {
   return (
     <Page title="User">
       <Container>
-        <AddTask {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        <AddProject {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Projects
@@ -209,7 +210,7 @@ export default function Project() {
                         <TableCell align="left">{site_address}</TableCell>
                         <TableCell align="left">{site_contact}</TableCell>
                         <TableCell align="right">
-                          <UserMoreMenu data={row} />
+                          <UserMoreMenu data={row} tableType="Edit Project" />
                         </TableCell>
                       </TableRow>
                     );
