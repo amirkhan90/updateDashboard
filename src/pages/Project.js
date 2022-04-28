@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { employeeSelector, getEmployees } from 'src/redux/reducers/employee';
 import AddEmployee from 'src/models/AddEmployee';
 import { getProjects, projectSelector } from 'src/redux/reducers/projects';
+import AddTask from 'src/models/AddTask';
 
 // ----------------------------------------------------------------------
 
@@ -148,7 +149,7 @@ export default function Project() {
   return (
     <Page title="User">
       <Container>
-        <AddEmployee {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        <AddTask {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Projects

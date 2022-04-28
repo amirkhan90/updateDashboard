@@ -7,6 +7,8 @@ import Iconify from '../../../components/Iconify';
 import { useDispatch } from 'react-redux';
 import { deleteEmployee, getEmployees } from 'src/redux/reducers/employee';
 import AddEmployee from 'src/models/AddEmployee';
+import { deleteTask, getTasks } from 'src/redux/reducers/tasks';
+import AddTask from 'src/models/AddTask';
 
 // ----------------------------------------------------------------------
 
@@ -17,9 +19,24 @@ export default function UserMoreMenu({ data, tableType }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  let dataId;
+
+  if (tableType === 'user') {
+    dataId = data.id;
+  } else if (tableType === 'Edit Task') {
+    dataId = data.task_id;
+  } else {
+  }
+  console.log('tableType', tableType);
   const handleDelete = (id) => {
-    dispatch(deleteEmployee({ token, id }));
-    dispatch(getEmployees(token));
+    if (tableType === 'user') {
+      dispatch(deleteEmployee({ token, id }));
+      dispatch(getEmployees(token));
+    } else if (tableType === 'Edit Task') {
+      dispatch(deleteTask({ token, id }));
+      dispatch(getTasks(token));
+    } else {
+    }
   };
   return (
     <>
@@ -40,7 +57,7 @@ export default function UserMoreMenu({ data, tableType }) {
         <MenuItem
           sx={{ color: 'text.secondary' }}
           onClick={() => {
-            handleDelete(data.id);
+            handleDelete(dataId);
           }}
         >
           <ListItemIcon>
@@ -53,7 +70,7 @@ export default function UserMoreMenu({ data, tableType }) {
           component={RouterLink}
           to="#"
           sx={{ color: 'text.secondary' }}
-          onClick={() => setAction({ open: true, type: 'edit employee', data: data })}
+          onClick={() => setAction({ open: true, type: tableType, data: data })}
         >
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
@@ -75,7 +92,12 @@ export default function UserMoreMenu({ data, tableType }) {
           </MenuItem>
         )}
         {tableType === 'user' && (
-          <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
+          <MenuItem
+            component={RouterLink}
+            to="#"
+            sx={{ color: 'text.secondary' }}
+            onClick={() => setAction({ open: true, type: 'edit password', data: data })}
+          >
             <ListItemIcon>
               <Iconify icon="teenyicons:password-outline" width={24} height={24} />
             </ListItemIcon>
@@ -90,7 +112,12 @@ export default function UserMoreMenu({ data, tableType }) {
             <ListItemText primary="Reports" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         )}
-        <AddEmployee {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        {tableType === 'user' && (
+          <AddEmployee {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        )}
+        {tableType === 'Edit Task' && (
+          <AddTask {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        )}
       </Menu>
     </>
   );

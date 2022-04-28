@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { employeeSelector, getEmployees } from 'src/redux/reducers/employee';
 import AddEmployee from 'src/models/AddEmployee';
 import { getTasks, tasksSelector } from 'src/redux/reducers/tasks';
+import AddTask from 'src/models/AddTask';
 
 // ----------------------------------------------------------------------
 
@@ -149,7 +150,7 @@ export default function Task() {
   return (
     <Page title="User">
       <Container>
-        <AddEmployee {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
+        <AddTask {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Tasks
@@ -159,7 +160,7 @@ export default function Task() {
             component={RouterLink}
             to="#"
             startIcon={<Iconify icon="eva:plus-fill" />}
-            onClick={() => setAction({ open: true, type: 'add employee', data: null })}
+            onClick={() => setAction({ open: true, type: 'Add New Task', data: null })}
           >
             New Task
           </Button>
@@ -220,7 +221,7 @@ export default function Task() {
                         <TableCell align="left">{start_date}</TableCell>
 
                         <TableCell align="right">
-                          <UserMoreMenu data={row} />
+                          <UserMoreMenu data={row} tableType="Edit Task" />
                         </TableCell>
                       </TableRow>
                     );

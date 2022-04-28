@@ -15,10 +15,19 @@ import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearState, creatEmployee, employeeSelector, getEmployees, updateEmployee } from 'src/redux/reducers/employee';
+import {
+  changePassword,
+  changeRole,
+  clearState,
+  creatEmployee,
+  employeeSelector,
+  getEmployees,
+  updateEmployee,
+} from 'src/redux/reducers/employee';
 import CreateUser from 'src/components/CreateUser';
 import EditUser from 'src/components/EditUser';
 import EditRole from 'src/components/EditRole';
+import ChangePassword from 'src/components/ChangePassword';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -65,11 +74,22 @@ export default function AddEmployee({ open, handleClose, data, type }) {
   const handleSubmit = async () => {
     formData.role = employeeRole;
     formData.token = token;
-    if (type === 'edit employee') {
-      dispatch(updateEmployee(formData));
-    } else {
-      dispatch(creatEmployee(formData));
+    console.log('add employee type', type);
+    switch (type) {
+      case 'user':
+        return dispatch(updateEmployee(formData));
+      case 'edit role':
+        return dispatch(changeRole(formData));
+      case 'edit password':
+        return dispatch(changePassword(formData));
+      default:
+        return dispatch(creatEmployee(formData));
     }
+    // if (type === 'edit employee') {
+    //   dispatch(updateEmployee(formData));
+    // } else {
+    //   dispatch(creatEmployee(formData));
+    // }
   };
   useEffect(() => {
     if (isSuccess) {
@@ -92,11 +112,19 @@ export default function AddEmployee({ open, handleClose, data, type }) {
           {type === 'add employee' && (
             <CreateUser onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
           )}
-          {type === 'edit employee' && (
+          {type === 'user' && (
             <EditUser onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
           )}
           {type === 'edit role' && (
             <EditRole onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
+          )}
+          {type === 'edit password' && (
+            <ChangePassword
+              onChange={onChange}
+              data={formData}
+              handleChange={handleChange}
+              employeeRole={employeeRole}
+            />
           )}
 
           {/* <TextField

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   input: { marginBottom: '16px' },
   paper: { minWidth: '500px' },
 }));
-export default function AddTask({ open, handleClose, data, type }) {
+export default function AddProject({ open, handleClose, data, type }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');

@@ -29,29 +29,23 @@ const useStyles = makeStyles((theme) => ({
   paper: { minWidth: '500px' },
 }));
 
-const EditRole = ({ onChange, data, employeeRole, handleChange }) => {
+const ChangePassword = ({ onChange, data, employeeRole, handleChange }) => {
   const classes = useStyles();
   const { name, email, password, role, contact, user_id } = data;
   return (
     <>
-      <FormControl variant="outlined" className={classes.formControl} fullWidth style={{ marginTop: '15px' }}>
-        <InputLabel id="demo-simple-select-outlined-label">employee</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={employeeRole}
-          onChange={handleChange}
-          label="employeeRole"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="PROJECT_MANAGER">PROJECT MANAGER</MenuItem>
-          <MenuItem value="FIELD_INSPECTOR">FIELD INSPECTOR</MenuItem>
-        </Select>
-      </FormControl>
+      <TextField
+        margin="dense"
+        id="password"
+        label="Password"
+        type="text"
+        fullWidth
+        className={classes.input}
+        value={password}
+        onChange={onChange}
+      />
     </>
   );
 };
 
-export default EditRole;
+export default ChangePassword;
