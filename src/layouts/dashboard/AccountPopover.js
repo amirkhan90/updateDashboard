@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
@@ -7,6 +7,9 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
+import { BASE_URL } from 'src/redux/services';
+import { useSelector } from 'react-redux';
+import { userSelector } from 'src/redux/reducers/user';
 
 // ----------------------------------------------------------------------
 
@@ -31,10 +34,11 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const navigate = useNavigate();
   const anchorRef = useRef(null);
 
   const [open, setOpen] = useState(null);
-
+  const { user } = useSelector(userSelector);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -43,6 +47,29 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const handleLogOut = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`${BASE_URL}users/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          token,
+        }),
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        localStorage.clear();
+        navigate('/login');
+      }
+    } catch (e) {
+      // return
+    }
+  };
+  const { name, email } = user;
   return (
     <>
       <IconButton
@@ -82,10 +109,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {email}
           </Typography>
         </Box>
 
@@ -101,7 +128,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

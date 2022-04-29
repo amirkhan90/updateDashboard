@@ -15,7 +15,6 @@ import AddProject from 'src/models/AddProject';
 // ----------------------------------------------------------------------
 
 export default function UserMoreMenu({ data, tableType }) {
-  console.log('data', data);
   const dispatch = useDispatch();
   const [action, setAction] = useState({ open: false, type: '', data: null });
   const token = localStorage.getItem('token');
@@ -30,7 +29,6 @@ export default function UserMoreMenu({ data, tableType }) {
     dataId = data.task_id;
   } else {
   }
-  console.log('tableType', tableType);
   const handleDelete = async (id) => {
     if (tableType === 'user') {
       await dispatch(deleteEmployee({ token, id }));
@@ -88,7 +86,7 @@ export default function UserMoreMenu({ data, tableType }) {
             component={RouterLink}
             to="#"
             sx={{ color: 'text.secondary' }}
-            onClick={() => setAction({ open: true, type: 'edit role', data: data })}
+            onClick={() => setAction({ open: true, type: 'Change Role', data: data })}
           >
             <ListItemIcon>
               <Iconify icon="carbon:user-role" width={24} height={24} />
@@ -101,7 +99,7 @@ export default function UserMoreMenu({ data, tableType }) {
             component={RouterLink}
             to="#"
             sx={{ color: 'text.secondary' }}
-            onClick={() => setAction({ open: true, type: 'edit password', data: data })}
+            onClick={() => setAction({ open: true, type: 'Change Password', data: data })}
           >
             <ListItemIcon>
               <Iconify icon="teenyicons:password-outline" width={24} height={24} />

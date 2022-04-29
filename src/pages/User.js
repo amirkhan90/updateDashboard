@@ -150,7 +150,7 @@ export default function User() {
         <AddEmployee {...action} handleClose={() => setAction({ open: false, type: '', data: null })} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Employee
           </Typography>
           <Button
             variant="contained"

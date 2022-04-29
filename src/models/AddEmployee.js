@@ -71,20 +71,25 @@ export default function AddEmployee({ open, handleClose, data, type }) {
     }));
   };
 
+  let heading;
+  console.log('add employee type', type);
   const handleSubmit = async () => {
     formData.role = employeeRole;
     formData.token = token;
-    console.log('add employee type', type);
+
     switch (type) {
       case 'user':
+        heading = 'Edit Employee';
         return dispatch(updateEmployee(formData));
-      case 'edit role':
+      case 'Change Role':
         return dispatch(changeRole(formData));
-      case 'edit password':
+      case 'Change Password':
         return dispatch(changePassword(formData));
       default:
         return dispatch(creatEmployee(formData));
     }
+
+    console.log('heading', heading);
     // if (type === 'edit employee') {
     //   dispatch(updateEmployee(formData));
     // } else {
@@ -107,7 +112,7 @@ export default function AddEmployee({ open, handleClose, data, type }) {
   return (
     <div style={{ width: '500px' }}>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" classes={{ paper: classes.paper }}>
-        <DialogTitle id="form-dialog-title">Add New Employee</DialogTitle>
+        <DialogTitle id="form-dialog-title">{type === 'user' ? 'Edit User' : type}</DialogTitle>
         <DialogContent>
           {type === 'add employee' && (
             <CreateUser onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
@@ -115,10 +120,10 @@ export default function AddEmployee({ open, handleClose, data, type }) {
           {type === 'user' && (
             <EditUser onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
           )}
-          {type === 'edit role' && (
+          {type === 'Change Role' && (
             <EditRole onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
           )}
-          {type === 'edit password' && (
+          {type === 'Change Password' && (
             <ChangePassword
               onChange={onChange}
               data={formData}

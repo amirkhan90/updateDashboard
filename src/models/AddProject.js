@@ -81,6 +81,7 @@ export default function AddProject({ open, handleClose, data, type }) {
 
   const handleSubmit = async () => {
     formData.token = token;
+    formData.user_id = project;
 
     if (type === 'Edit Project') {
       dispatch(updateProject(formData));

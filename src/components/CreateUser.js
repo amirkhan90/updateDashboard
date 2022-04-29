@@ -58,14 +58,14 @@ const CreateUser = ({ onChange, data, employeeRole, handleChange }) => {
         margin="dense"
         id="password"
         label="Password"
-        type="password"
+        type="text"
         fullWidth
         className={classes.input}
         value={password}
         onChange={onChange}
       />
       <FormControl variant="outlined" className={classes.formControl} fullWidth>
-        <InputLabel id="demo-simple-select-outlined-label">employee</InputLabel>
+        <InputLabel id="demo-simple-select-outlined-label">Employee</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"

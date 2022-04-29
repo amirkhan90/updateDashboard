@@ -9,6 +9,9 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import { useEffect } from 'react';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +44,19 @@ DashboardNavbar.propTypes = {
 };
 
 export default function DashboardNavbar({ onOpenSidebar }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token !== null && token !== undefined && token !== 'undefined') {
+      const decoded = jwt_decode(token);
+      let current = Date.now() / 1000;
+      //  alert(decoded.exp > current);
+      if (decoded.exp && decoded.exp < current) {
+        localStorage.clear();
+        navigate('/login');
+      }
+    }
+  });
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -48,12 +64,12 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar />
+        {/* <Searchbar /> */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <LanguagePopover />
-          <NotificationsPopover />
+          {/* <LanguagePopover />
+          <NotificationsPopover /> */}
           <AccountPopover />
         </Stack>
       </ToolbarStyle>
