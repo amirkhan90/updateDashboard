@@ -30,6 +30,8 @@ export default function UserMoreMenu({ data, tableType }) {
   } else {
   }
   const handleDelete = async (id) => {
+    const agree = window.confirm('Are You Want to delete');
+    if (!agree) return;
     if (tableType === 'user') {
       await dispatch(deleteEmployee({ token, id }));
       dispatch(getEmployees(token));
@@ -108,7 +110,12 @@ export default function UserMoreMenu({ data, tableType }) {
           </MenuItem>
         )}
         {tableType === 'user' && (
-          <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
+          <MenuItem
+            component={RouterLink}
+            to="#"
+            sx={{ color: 'text.secondary' }}
+            onClick={() => setAction({ open: true, type: 'View Reports', data: data })}
+          >
             <ListItemIcon>
               <Iconify icon="carbon:report" width={24} height={24} />
             </ListItemIcon>

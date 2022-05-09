@@ -28,6 +28,8 @@ import CreateUser from 'src/components/CreateUser';
 import EditUser from 'src/components/EditUser';
 import EditRole from 'src/components/EditRole';
 import ChangePassword from 'src/components/ChangePassword';
+import { Report } from '@material-ui/icons';
+import Reports from 'src/components/Reports';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -88,13 +90,6 @@ export default function AddEmployee({ open, handleClose, data, type }) {
       default:
         return dispatch(creatEmployee(formData));
     }
-
-    console.log('heading', heading);
-    // if (type === 'edit employee') {
-    //   dispatch(updateEmployee(formData));
-    // } else {
-    //   dispatch(creatEmployee(formData));
-    // }
   };
   useEffect(() => {
     if (isSuccess) {
@@ -131,70 +126,19 @@ export default function AddEmployee({ open, handleClose, data, type }) {
               employeeRole={employeeRole}
             />
           )}
-
-          {/* <TextField
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            className={classes.input}
-            value={name}
-            onChange={onChange}
-          />
-          <TextField
-            margin="dense"
-            id="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            className={classes.input}
-            value={email}
-            onChange={onChange}
-          />{' '}
-        <TextField
-            margin="dense"
-            id="password"
-            label="Password"
-            type="password"
-            fullWidth
-            className={classes.input}
-            value={password}
-            onChange={onChange}
-          />
-          <FormControl variant="outlined" className={classes.formControl} fullWidth>
-            <InputLabel id="demo-simple-select-outlined-label">employee</InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={employeeRole}
-              onChange={handleChange}
-              label="employeeRole"
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="PROJECT_MANAGER">PROJECT MANAGER</MenuItem>
-              <MenuItem value="FIELD_INSPECTOR">FIELD INSPECTOR</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            margin="dense"
-            id="contact"
-            label="Contact"
-            type="text"
-            fullWidth
-            value={contact}
-            onChange={onChange}
-          /> */}
+          {type === 'View Reports' && (
+            <Reports onChange={onChange} data={formData} handleChange={handleChange} employeeRole={employeeRole} />
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
-            {type === 'edit employee' ? 'Update' : 'Create'}
-          </Button>
+          {type !== 'View Reports' && (
+            <Button onClick={handleSubmit} color="primary">
+              {type === 'user' ? 'Update' : 'Create'}
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>

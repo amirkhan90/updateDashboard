@@ -175,7 +175,7 @@ export default function AddProject({ open, handleClose, data, type }) {
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            {type === 'edit employee' ? 'Update' : 'Create'}
+            {type === 'Edit Project' ? 'Update' : 'Create'}
           </Button>
         </DialogActions>
       </Dialog>

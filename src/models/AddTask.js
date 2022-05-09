@@ -183,7 +183,7 @@ export default function AddTask({ open, handleClose, data, type }) {
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            {type === 'edit employee' ? 'Update' : 'Create'}
+            {type === 'Edit Task' ? 'Update' : 'Create'}
           </Button>
         </DialogActions>
       </Dialog>
