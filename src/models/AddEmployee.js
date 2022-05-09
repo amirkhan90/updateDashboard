@@ -6,9 +6,11 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -30,6 +32,13 @@ import EditRole from 'src/components/EditRole';
 import ChangePassword from 'src/components/ChangePassword';
 import { Report } from '@material-ui/icons';
 import Reports from 'src/components/Reports';
+import Iconify from 'src/components/Iconify';
+
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -46,6 +55,8 @@ export default function AddEmployee({ open, handleClose, data, type }) {
   console.log('type', type);
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [snakeBarOpen, setSnakeBarOpen] = useState(false);
 
   const token = localStorage.getItem('token');
   const [formData, setFormData] = useState({});
@@ -72,9 +83,30 @@ export default function AddEmployee({ open, handleClose, data, type }) {
       [e.target.id]: e.target.value,
     }));
   };
+  const handleSnackBar = () => {
+    setSnakeBarOpen(true);
+  };
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnakeBarOpen(false);
+  };
+  const action = (
+    <React.Fragment>
+      {/* <Button color="secondary" size="small" onClick={handleSnackBarClose}>
+        UNDO
+      </Button> */}
+      <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackBarClose}>
+        <Iconify icon="clarity:window-close-line" width={24} height={24} />
+      </IconButton>
+    </React.Fragment>
+  );
 
   let heading;
   console.log('add employee type', type);
+
   const handleSubmit = async () => {
     formData.role = employeeRole;
     formData.token = token;
@@ -97,6 +129,7 @@ export default function AddEmployee({ open, handleClose, data, type }) {
       console.log('useEffect is called');
       dispatch(clearState());
       handleClose();
+      handleSnackBar();
     }
     if (isError) {
       dispatch(clearState());
@@ -141,6 +174,16 @@ export default function AddEmployee({ open, handleClose, data, type }) {
           )}
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={snakeBarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackBarClose}
+        message={successMessage}
+        severity="success"
+        action={action}
+      >
+        <Alert severity="success">{successMessage}</Alert>
+      </Snackbar>
     </div>
   );
 }
