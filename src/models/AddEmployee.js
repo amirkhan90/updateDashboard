@@ -35,6 +35,7 @@ import Reports from 'src/components/Reports';
 import Iconify from 'src/components/Iconify';
 
 import MuiAlert from '@mui/material/Alert';
+import CustomizedSnackbars from 'src/components/CustomizedSnackbars';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -55,6 +56,8 @@ export default function AddEmployee({ open, handleClose, data, type }) {
   console.log('type', type);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('');
 
   const [snakeBarOpen, setSnakeBarOpen] = useState(false);
 
@@ -127,11 +130,16 @@ export default function AddEmployee({ open, handleClose, data, type }) {
     if (isSuccess) {
       dispatch(getEmployees(token));
       console.log('useEffect is called');
+      setMessage(successMessage);
+      setSeverity('success');
       dispatch(clearState());
       handleClose();
       handleSnackBar();
     }
     if (isError) {
+      handleSnackBar();
+      setMessage(errorMessage);
+      setSeverity('error');
       dispatch(clearState());
     }
   }, [isSuccess, isError]);
@@ -174,7 +182,7 @@ export default function AddEmployee({ open, handleClose, data, type }) {
           )}
         </DialogActions>
       </Dialog>
-      <Snackbar
+      {/* <Snackbar
         open={snakeBarOpen}
         autoHideDuration={3000}
         onClose={handleSnackBarClose}
@@ -183,7 +191,8 @@ export default function AddEmployee({ open, handleClose, data, type }) {
         action={action}
       >
         <Alert severity="success">{successMessage}</Alert>
-      </Snackbar>
+      </Snackbar> */}
+      <CustomizedSnackbars open={snakeBarOpen} message={message} type={severity} reset={handleSnackBarClose} />
     </div>
   );
 }
