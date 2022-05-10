@@ -13,9 +13,9 @@ export default function DashboardApp() {
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
-        </Typography> */}
+        </Typography>
         <Box color="dark" style={{ height: '1024px', width: '100%' }}>
           <WrappedMap
             googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBpI4lcmxMKdnkrrRlZUF-eQanA2ZSDZVI`}
