@@ -15,9 +15,10 @@ import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearState, creatEmployee, employeeSelector, getEmployees, updateEmployee } from 'src/redux/reducers/employee';
+import { creatEmployee, employeeSelector, getEmployees, updateEmployee } from 'src/redux/reducers/employee';
 import { getProjects, projectSelector } from 'src/redux/reducers/projects';
-import { creatTask, getTasks, tasksSelector, updateTask } from 'src/redux/reducers/tasks';
+import { clearState, creatTask, getTasks, tasksSelector, updateTask } from 'src/redux/reducers/tasks';
+import CustomizedSnackbars from 'src/components/CustomizedSnackbars';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -37,6 +38,9 @@ export default function AddTask({ open, handleClose, data, type }) {
   const [formData, setFormData] = useState({});
   const [assigned_to, setAssigned_to] = useState('');
   const [project, setProject] = useState('');
+  const [snakeBarOpen, setSnakeBarOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('');
   const { employee } = useSelector(employeeSelector);
   const { successMessage, isSuccess, isError, errorMessage, isFetching } = useSelector(tasksSelector);
   const { projects } = useSelector(projectSelector);
@@ -47,6 +51,16 @@ export default function AddTask({ open, handleClose, data, type }) {
   }, []);
 
   var employeExloadAdmin = employee.filter((el) => el.role !== 'ADMIN');
+  const handleSnackBar = () => {
+    setSnakeBarOpen(true);
+  };
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnakeBarOpen(false);
+  };
 
   useEffect(() => {
     setFormData({
@@ -89,12 +103,18 @@ export default function AddTask({ open, handleClose, data, type }) {
   useEffect(() => {
     if (isSuccess) {
       dispatch(getTasks(token));
-
       dispatch(clearState());
+      setMessage(successMessage);
+      setSeverity('success');
+
       handleClose();
+      handleSnackBar();
     }
     if (isError) {
       dispatch(clearState());
+      handleSnackBar();
+      setMessage(errorMessage);
+      setSeverity('error');
     }
   }, [isSuccess, isError]);
 
@@ -187,6 +207,7 @@ export default function AddTask({ open, handleClose, data, type }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <CustomizedSnackbars open={snakeBarOpen} message={message} type={severity} reset={handleSnackBarClose} />
     </div>
   );
 }

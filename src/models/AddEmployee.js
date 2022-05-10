@@ -96,19 +96,8 @@ export default function AddEmployee({ open, handleClose, data, type }) {
 
     setSnakeBarOpen(false);
   };
-  const action = (
-    <React.Fragment>
-      {/* <Button color="secondary" size="small" onClick={handleSnackBarClose}>
-        UNDO
-      </Button> */}
-      <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackBarClose}>
-        <Iconify icon="clarity:window-close-line" width={24} height={24} />
-      </IconButton>
-    </React.Fragment>
-  );
 
   let heading;
-  console.log('add employee type', type);
 
   const handleSubmit = async () => {
     formData.role = employeeRole;
@@ -126,10 +115,11 @@ export default function AddEmployee({ open, handleClose, data, type }) {
         return dispatch(creatEmployee(formData));
     }
   };
+  console.log('success', isSuccess);
+  console.log('error', isError);
   useEffect(() => {
     if (isSuccess) {
       dispatch(getEmployees(token));
-      console.log('useEffect is called');
       setMessage(successMessage);
       setSeverity('success');
       dispatch(clearState());

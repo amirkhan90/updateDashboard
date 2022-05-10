@@ -6,6 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -15,9 +16,11 @@ import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearState, creatEmployee, employeeSelector, getEmployees, updateEmployee } from 'src/redux/reducers/employee';
-import { createProject, getProjects, projectSelector, updateProject } from 'src/redux/reducers/projects';
+import { creatEmployee, employeeSelector, getEmployees, updateEmployee } from 'src/redux/reducers/employee';
+import { clearState, createProject, getProjects, projectSelector, updateProject } from 'src/redux/reducers/projects';
 import { creatTask, getTasks, tasksSelector, updateTask } from 'src/redux/reducers/tasks';
+import CustomizedSnackbars from 'src/components/CustomizedSnackbars';
+import Iconify from 'src/components/Iconify';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -37,6 +40,9 @@ export default function AddProject({ open, handleClose, data, type }) {
   const [formData, setFormData] = useState({});
   const [assigned_to, setAssigned_to] = useState('');
   const [project, setProject] = useState('');
+  const [snakeBarOpen, setSnakeBarOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('');
   const { employee } = useSelector(employeeSelector);
   const { successMessage, isSuccess, isError, errorMessage, isFetching } = useSelector(projectSelector);
   const { projects } = useSelector(projectSelector);
@@ -48,7 +54,17 @@ export default function AddProject({ open, handleClose, data, type }) {
 
   var employeExloadAdmin = employee.filter((el) => el.role !== 'ADMIN');
 
-  console.log('project', project);
+  const handleSnackBar = () => {
+    setSnakeBarOpen(true);
+  };
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnakeBarOpen(false);
+  };
+
   useEffect(() => {
     setFormData({
       project_id: data ? data?.id : '',
@@ -89,19 +105,24 @@ export default function AddProject({ open, handleClose, data, type }) {
       dispatch(createProject(formData));
     }
   };
-  console.log('issucess', isSuccess);
+
   useEffect(() => {
     if (isSuccess) {
       dispatch(getProjects(token));
-
       dispatch(clearState());
+      setMessage(successMessage);
+      setSeverity('success');
+
       handleClose();
+      handleSnackBar();
     }
     if (isError) {
       dispatch(clearState());
+      handleSnackBar();
+      setMessage(errorMessage);
+      setSeverity('error');
     }
   }, [isSuccess, isError]);
-
   return (
     <div style={{ width: '500px' }}>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" classes={{ paper: classes.paper }}>
@@ -179,6 +200,7 @@ export default function AddProject({ open, handleClose, data, type }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <CustomizedSnackbars open={snakeBarOpen} message={message} type={severity} reset={handleSnackBarClose} />
     </div>
   );
 }

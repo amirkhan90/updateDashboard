@@ -144,11 +144,13 @@ export const projectSlice = createSlice({
     [createProject.fulfilled]: (state, { payload }) => {
       state.isFetching = false;
       state.isSuccess = true;
+      state.isError = false;
       state.successMessage = 'Created Successfully';
     },
     [createProject.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
+      state.isSuccess = false;
       state.errorMessage = 'Please Provide Correct Data';
     },
     [updateProject.pending]: (state) => {

@@ -6,7 +6,6 @@ import MuiAlert from '@mui/material/Alert';
 const Alert = React.forwardRef((props, ref) => <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />);
 
 export default function CustomizedSnackbars({ open, message, type, reset }) {
-  console.log('amir =>', open, message, type, reset);
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

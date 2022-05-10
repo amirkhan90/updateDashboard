@@ -212,8 +212,6 @@ export const employeeSlice = createSlice({
     },
     [updateEmployee.pending]: (state) => {
       state.isFetching = true;
-      state.isError = false;
-      state.isSuccess = false;
     },
     [updateEmployee.fulfilled]: (state, { payload }) => {
       console.log('update reducer call');
