@@ -19,6 +19,7 @@ import { creatEmployee, employeeSelector, getEmployees, updateEmployee } from 's
 import { getProjects, projectSelector } from 'src/redux/reducers/projects';
 import { clearState, creatTask, getTasks, tasksSelector, updateTask } from 'src/redux/reducers/tasks';
 import CustomizedSnackbars from 'src/components/CustomizedSnackbars';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AddTask({ open, handleClose, data, type }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [formData, setFormData] = useState({});
   const [assigned_to, setAssigned_to] = useState('');
@@ -111,6 +113,11 @@ export default function AddTask({ open, handleClose, data, type }) {
       handleSnackBar();
     }
     if (isError) {
+      if (errorMessage === 'jwt session expired,Please login again') {
+        alert('session expired,Please login again');
+        localStorage.clear();
+        navigate('/login');
+      }
       dispatch(clearState());
       handleSnackBar();
       setMessage(errorMessage);

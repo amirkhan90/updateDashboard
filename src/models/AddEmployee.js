@@ -36,6 +36,7 @@ import Iconify from 'src/components/Iconify';
 
 import MuiAlert from '@mui/material/Alert';
 import CustomizedSnackbars from 'src/components/CustomizedSnackbars';
+import { useNavigate } from 'react-router-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -56,6 +57,7 @@ export default function AddEmployee({ open, handleClose, data, type }) {
   console.log('type', type);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('');
 
@@ -127,6 +129,11 @@ export default function AddEmployee({ open, handleClose, data, type }) {
       handleSnackBar();
     }
     if (isError) {
+      if (errorMessage === 'jwt session expired,Please login again') {
+        alert('session expired,Please login again');
+        localStorage.clear();
+        navigate('/login');
+      }
       handleSnackBar();
       setMessage(errorMessage);
       setSeverity('error');
