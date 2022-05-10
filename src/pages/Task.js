@@ -167,7 +167,12 @@ export default function Task() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            placeholder="Search task..."
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>

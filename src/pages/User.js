@@ -164,7 +164,12 @@ export default function User() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            placeholder="Search employee..."
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
