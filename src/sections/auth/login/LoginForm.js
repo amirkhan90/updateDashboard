@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
@@ -7,8 +7,8 @@ import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormContr
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
-import { useDispatch } from 'react-redux';
-import { loginUser } from 'src/redux/reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearState, loginUser, userSelector } from 'src/redux/reducers/user';
 
 // ----------------------------------------------------------------------
 
@@ -34,11 +34,24 @@ export default function LoginForm() {
     },
   });
 
+  const { isError, isSuccess } = useSelector(userSelector);
+  useEffect(() => {
+    if (isError) {
+      alert('error');
+    }
+
+    if (isSuccess) {
+      navigate('/');
+    }
+
+    dispatch(clearState());
+  }, [isError, isSuccess, navigate, dispatch]);
+
   const { errors, touched, values, isSubmitting, getFieldProps } = formik;
 
   function handleSubmit() {
     dispatch(loginUser(values));
-    navigate('/dashboard/app');
+    // navigate('/dashboard/app');
   }
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
